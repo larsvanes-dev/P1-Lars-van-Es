@@ -3,10 +3,13 @@ function setup() {
 }
 
 function draw() {
+  // Setup, alle witte vakjes
   background(215);
   stroke(0);
   strokeWeight(4);
   fill(255);
+
+  // Elke vierkant met kleuren
   rect(0,0,90,40);
 
   fill(255,255,0);
