@@ -5,16 +5,21 @@ let oranje = 150;
 let groen = 150;
 let ballX = 250;
 let ballY = 250;
+let israel;
+
+function preload() {
+  israel = loadImage('israel-inform-israel.gif');
+}
 
 function setup() {
   createCanvas(400, 400);
 }
 
 function keyReleased() {
-  if (keyCode === 32) {
+  if (keyIsDown === 32) {
     timer = 0;
   }
-  if (keyCode === ENTER) {
+  if (keyIsDown === ENTER) {
     trafficNum = trafficNum + 1;
     if (trafficNum >= 3) {
       trafficNum = 0;
@@ -35,7 +40,7 @@ function draw() {
 
   // Vierkantje
   if (keyIsPressed === true) {
-    if (keyCode === ENTER) {
+    if (keyIsDown === ENTER) {
       rect(20,20,60,60);
     }
   }
@@ -78,19 +83,32 @@ function draw() {
   circle(ballX,ballY,60);
   fill(0);
   text("8",ballX - 14,ballY + 14);
-  if (keyIsPressed === true) {
-    if (keyCode === 38 || keyCode === 87) {
-      ballY = ballY - 1;
-    }
-    if (keyCode === 39 || keyCode === 68) {
-      ballX = ballX + 1;
-    }
-    if (keyCode === 40 || keyCode === 83) {
-      ballY = ballY + 1;
-    }
-    if (keyCode === 37 || keyCode === 65) {
-      ballX = ballX - 1;
-    }
+  if (keyIsDown(75)) {
+    image(israel, ballX - 45, ballY - 45, 90, 90);
+  }
+  if (keyIsDown(38) || keyIsDown(87)) {
+    ballY = ballY - 5;
+  }
+  if (keyIsDown(39) || keyIsDown(68)) {
+    ballX = ballX + 5;
+  }
+  if (keyIsDown(40) || keyIsDown(83)) {
+    ballY = ballY + 5;
+  }
+  if (keyIsDown(37) || keyIsDown (65)) {
+    ballX = ballX - 5;
+  }
+  if (ballX > 445) {
+    ballX = -45;
+  }
+  if (ballX < -45) {
+    ballX = 445;
+  }
+  if (ballY > 445) {
+    ballY = -45;
+  }
+  if (ballY < -45) {
+    ballY = 445;
   }
 
 }
