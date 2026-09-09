@@ -13,4 +13,5 @@ function draw() {
   israelFrame = abs(mouseX / 10);
   image(israel, mouseX - 100, mouseY - 100, 200, 200);
   israel.setFrame(israelFrame);
+  //Inform israe
 }

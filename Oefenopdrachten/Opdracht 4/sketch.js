@@ -110,5 +110,5 @@ function draw() {
   if (ballY < -45) {
     ballY = 445;
   }
-
+  // Inform Israel
 }
