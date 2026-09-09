@@ -26,13 +26,33 @@ function draw() {
     // Strepen
     fill(255);
     stroke(255);
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
     line(20 + i * 60, 370, 60 + i * 60, 370);
   }
 
+  // Boompjes
+  for (let i = 0; i < 8; i++) {
+    noStroke();
+    fill(190,70,0);
+    rect(20 + i * 60, 280, 15,60);
+    fill(0,120,0);
+    circle(27.5 + i * 60, 280, 40);
+    circle(14.5 + i * 60, 284, 25);
+    circle(40.5 + i * 60, 284, 25);
+  }
+
   // Verkeerslicht
+  stroke(255);
   fill(100);
   rect(400,170,50,160);
   fill(130);
   rect(410,330,30,10);
+  
+    // Lichtjes
+    fill(250,0,0);
+    circle(425, 205, 40);
+    fill(250,180,0);
+    circle(425, 250, 40);
+    fill(0,255,0);
+    circle(425, 295, 40);
 }

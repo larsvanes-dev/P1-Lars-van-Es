@@ -6,6 +6,7 @@ let optellen;
 let aftrekken;
 let vermenigvuldigen;
 let delen;
+let ypos = 80;
 
 function setup() {
   createCanvas(400, 400);
@@ -24,9 +25,8 @@ function draw() {
   text(greeting, 20, 60);
 
   // Tekst + waarde van variabele
-  text("Optellen: " + optellen, 20, 80);
-  text("Aftrekken: " + aftrekken, 20, 100);
-  text("Vermenigvuldigen: " + vermenigvuldigen, 20, 120);
-  text("Delen: " + delen, 20, 140);
-
+  text("Optellen: " + optellen, 20, ypos);
+  text("Aftrekken: " + aftrekken, 20, ypos + 20);
+  text("Vermenigvuldigen: " + vermenigvuldigen, 20, ypos + 40);
+  text("Delen: " + delen, 20, ypos + 60);
 }
