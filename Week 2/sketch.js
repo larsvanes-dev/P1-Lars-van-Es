@@ -1,3 +1,10 @@
+let auto1Snelheid = 2;
+let auto2Snelheid = 1;
+let auto3Snelheid = 1;
+let auto1VorigePositie = 100;
+let auto2VorigePositie = 150;
+let auto3VorigePositie = 50;
+
 function setup() {
   createCanvas(500, 400);
 }
@@ -55,4 +62,58 @@ function draw() {
     circle(425, 250, 40);
     fill(0,255,0);
     circle(425, 295, 40);
+
+  // Auto's
+  noStroke();
+  for (let i = 0; i < 3; i++) {
+      
+      // Variabelen auto's
+      let carPos;
+      let clrR = 0;
+      let clrG = 0;
+      let clrB = 0;
+      let caroffset = 0;
+
+      // Configuratie auto's
+
+      // Auto 1
+      if (i === 0) {
+        carPos = auto1VorigePositie += auto1Snelheid;
+        clrR = 255;
+        carOffset = 30;
+        auto1VorigePositie = carPos;
+        if (carPos > 500) {
+          auto1VorigePositie = -80;
+        }
+      } else {
+        carOffset = 0;
+
+      // Auto 2
+        if (i === 1) {
+          carPos = auto2VorigePositie += auto2Snelheid;
+          clrB = 255;
+          auto2VorigePositie = carPos;
+          if (carPos > 500) {
+          auto2VorigePositie = -80;
+          }
+        } else {
+
+      // Auto 3
+          if (i === 2) {
+            carPos = auto3VorigePositie += auto3Snelheid;
+            clrG = 255;
+            auto3VorigePositie = carPos;
+            if (carPos > 500) {
+              auto3VorigePositie = -80;
+            }
+          }
+        }
+      }
+      
+      // Auto tekenen
+      fill(clrR,clrG,clrB);
+      rect(carPos,350 - carOffset,60,35);
+      rect(carPos+60,370 - carOffset,20,15);
+      fill(0);
+    }
 }
