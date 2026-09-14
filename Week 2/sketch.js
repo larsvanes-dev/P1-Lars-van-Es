@@ -1,5 +1,29 @@
 let carPrevPos = [0,100,170,20];
 let stopLicht = "groen"
+let zonX = 50;
+let zonY = 70;
+let zonEffect = 0;
+let zonGrootte = 0;
+let boomEffect = 0;
+let boomVerplaatsing = 0;
+let wolkX = 400;
+
+function keyReleased() {
+  // Besturing stoplicht
+  if (keyCode === 13) {
+    if (stopLicht === "rood") {
+      stopLicht = "geel";
+    } else {
+      if (stopLicht === "geel") {
+        stopLicht = "groen";
+      } else {
+        if (stopLicht === "groen") {
+          stopLicht = "rood";
+        }
+      }
+    }
+  }
+}
 
 function setup() {
   createCanvas(500, 400);
@@ -11,10 +35,35 @@ function draw() {
   noStroke();
 
   // De zon
-  fill(255,180,0);
-  circle(random(49,51),70,60);
+  fill(220,180,0);
+  circle(zonX,zonY,zonGrootte);
   fill(255,255,0);
-  circle(random(49,51),70,45);
+  circle(zonX,zonY,45);
+
+    // Beweging zon
+    zonEffect += 0.05
+    zonGrootte = 55 - 10 * sin(zonEffect);
+    zonX += 0.5;
+    if (zonX > 560) {
+      zonX = -60;
+    }
+
+  // Wolk
+  fill(190);
+  circle(wolkX,90 - 5,60);
+  circle(wolkX + 30,100 - 5,40);
+  circle(wolkX - 30,95 - 5,40);
+
+  fill(255);
+  circle(wolkX,90,60);
+  circle(wolkX + 30,100,40);
+  circle(wolkX - 30,95,40);
+
+    // Wolk beweging
+    wolkX -= 0.7
+    if (wolkX < -60) {
+      wolkX = 560;
+    }
 
   // Bergen
   fill(185);
@@ -35,14 +84,23 @@ function draw() {
   }
 
   // Boompjes
+
+  // Variabelen animatie voor bomen
+  boomVerplaatsing += 0.08
+  boomEffect = 1 - 3.5 * sin(boomVerplaatsing);
+
+  // Kloont bomen meerdere keren
   for (let i = 0; i < 8; i++) {
     noStroke();
     fill(190,70,0);
     rect(20 + i * 60, 280, 15,60);
+    stroke(0,255,0);
+    fill(0,170,0);
+    circle((14.5 + i * 60) + boomEffect, 284, 25);
+    fill(0,190,0);
+    circle((40.5 + i * 60) + 1.1 * boomEffect, 284, 25);
     fill(0,120,0);
     circle(27.5 + i * 60, 280, 40);
-    circle(14.5 + i * 60, 284, 25);
-    circle(40.5 + i * 60, 284, 25);
   }
 
   // Verkeerslicht
@@ -52,12 +110,24 @@ function draw() {
   fill(130);
   rect(410,330,30,10);
   
-    // Lichtjes
-    fill(250,0,0);
+    // Lichtjes, if-statements veranderen kleur
+    if (stopLicht === "rood") {
+      fill(250,0,0);
+    } else {
+      fill(150,0,0);
+    }
     circle(425, 205, 40);
-    fill(250,180,0);
+    if (stopLicht === "geel") {
+      fill(250,180,0);
+    } else {
+      fill(150,40,0);
+    }
     circle(425, 250, 40);
-    fill(0,255,0);
+    if (stopLicht === "groen") {
+      fill(0,255,0);
+    } else {
+      fill(0,150,0)
+    }
     circle(425, 295, 40);
 
   // Auto's
@@ -101,11 +171,25 @@ function draw() {
         }
 
       // Beweging en stoppen
+    
+    // Voor auto's 1 en 3: Dit zorgt ervoor dat ze niet tegen elkaar kunnen botsen
+    if (i === 3 && carPrevPos[3] > carPrevPos[2] - 100 && carPrevPos[3] < carPrevPos[2]) {
+    } else {
+      if (i === 2 && carPrevPos[2] > carPrevPos[3] - 100 && carPrevPos[2] < carPrevPos[3]) {
+    } else {
+      // Als ze nog niet bij het verkeerslicht staan of als het stoplicht groen is blijven de auto's doorrijden
+      // de x van elke auto verandert met de waarde van hun stap-variabele
       if (carPos < 300 || stopLicht === "groen") {
         carPos = carPrevPos[i] + stap;
       } else {
+        // Anders, als het stoplicht geel is halveert de snelheid
         if (stopLicht === "geel") {
           carPos = carPrevPos[i] + 0.5 * stap;
+        } else {
+          // In alle andere situaties mogen de auto's alleen nog rijden als de x hoger is dan 340
+          if (carPos > 340) {
+            carPos = carPrevPos[i] + 0.5 * stap;
+          }
         }
       }
       
@@ -113,6 +197,8 @@ function draw() {
       if (carPos > 500) {
         carPos = -80;
       }
+      }
+    }
       
       // Werk arrays bij
       carPrevPos[i] = carPos;
