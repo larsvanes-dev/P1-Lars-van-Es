@@ -7,6 +7,11 @@ let zonGrootte = 0;
 let boomEffect = 0;
 let boomVerplaatsing = 0;
 let wolkX = 400;
+let honk;
+
+function preload() {
+  honk = loadSound('honk.wav');
+}
 
 function keyReleased() {
   // Besturing stoplicht
@@ -21,6 +26,15 @@ function keyReleased() {
           stopLicht = "rood";
         }
       }
+    }
+  }
+}
+
+function mouseReleased() {
+  for (let i = 1; i < 4; i++) {
+    // Geluid afspelen als er op een auto wordt geklikt
+    if (mouseX >= carPrevPos[i] && mouseX <= carPrevPos[i] + 80 && mouseY >= 320 && mouseY <= 385) {
+      honk.play();
     }
   }
 }
