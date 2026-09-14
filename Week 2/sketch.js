@@ -1,23 +1,20 @@
-let auto1Snelheid = 2;
-let auto2Snelheid = 1;
-let auto3Snelheid = 1;
-let auto1VorigePositie = 100;
-let auto2VorigePositie = 150;
-let auto3VorigePositie = 50;
+let carPrevPos = [0,100,170,20];
+let stopLicht = "groen"
 
 function setup() {
   createCanvas(500, 400);
 }
 
 function draw() {
+  strokeWeight(1);
   background(0,190,255);
   noStroke();
 
   // De zon
   fill(255,180,0);
-  circle(50,70,60);
+  circle(random(49,51),70,60);
   fill(255,255,0);
-  circle(50,70,45);
+  circle(random(49,51),70,45);
 
   // Bergen
   fill(185);
@@ -65,55 +62,69 @@ function draw() {
 
   // Auto's
   noStroke();
-  for (let i = 0; i < 3; i++) {
+  for (let i = 1; i < 4; i++) {
       
       // Variabelen auto's
       let carPos;
       let clrR = 0;
       let clrG = 0;
       let clrB = 0;
-      let caroffset = 0;
+      let carOffset = 0;
+      let stap;
 
       // Configuratie auto's
+      noStroke();
 
       // Auto 1
-      if (i === 0) {
-        carPos = auto1VorigePositie += auto1Snelheid;
+      if (i === 1) {
+        carPos = carPrevPos[1];
+        stap = 1.2;
         clrR = 255;
         carOffset = 30;
-        auto1VorigePositie = carPos;
-        if (carPos > 500) {
-          auto1VorigePositie = -80;
-        }
       } else {
         carOffset = 0;
 
       // Auto 2
-        if (i === 1) {
-          carPos = auto2VorigePositie += auto2Snelheid;
+        if (i === 2) {
+          carPos = carPrevPos[2];
+          stap = 1;
           clrB = 255;
-          auto2VorigePositie = carPos;
-          if (carPos > 500) {
-          auto2VorigePositie = -80;
-          }
         } else {
 
-      // Auto 3
-          if (i === 2) {
-            carPos = auto3VorigePositie += auto3Snelheid;
-            clrG = 255;
-            auto3VorigePositie = carPos;
-            if (carPos > 500) {
-              auto3VorigePositie = -80;
+            // Auto 3
+            if (i === 3) {
+              carPos = carPrevPos[3];
+              stap = 1;
+              clrG = 255;
             }
           }
         }
+
+      // Beweging en stoppen
+      if (carPos < 300 || stopLicht === "groen") {
+        carPos = carPrevPos[i] + stap;
+      } else {
+        if (stopLicht === "geel") {
+          carPos = carPrevPos[i] + 0.5 * stap;
+        }
       }
       
+      // Beweging loopt
+      if (carPos > 500) {
+        carPos = -80;
+      }
+      
+      // Werk arrays bij
+      carPrevPos[i] = carPos;
+
       // Auto tekenen
       fill(clrR,clrG,clrB);
       rect(carPos,350 - carOffset,60,35);
       rect(carPos+60,370 - carOffset,20,15);
       fill(0);
+      stroke(130);
+      strokeWeight(3);
+      circle(carPos+10,385 - carOffset,20);
+      circle(carPos+60,385 - carOffset,20);
     }
 }
