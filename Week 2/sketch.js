@@ -8,6 +8,10 @@ let boomEffect = 0;
 let boomVerplaatsing = 0;
 let wolkX = 400;
 let honk;
+let tijd = "dag";
+let nachtA = 180;
+let nachtB = 255;
+let nachtC = 0;
 
 function preload() {
   honk = loadSound('honk.wav');
@@ -45,13 +49,36 @@ function setup() {
 
 function draw() {
   strokeWeight(1);
-  background(0,190,255);
   noStroke();
+
+  // Achtergrond verandert bij dag- en nachtcyclus
+  background(0,nachtA,nachtB);
+  if (tijd === "nacht") {
+    if (nachtA > 0) {
+      nachtA -= 2;
+    }
+    if (nachtB > 80) {
+      nachtB -= 2;
+    } 
+  } else {
+    if (nachtA < 180) {
+      nachtA += 2;
+    }
+    if (nachtB < 255) {
+      nachtB += 2;
+    }
+  }
 
   // De zon
   fill(220,180,0);
-  circle(zonX,zonY,zonGrootte);
-  fill(255,255,0);
+  if (tijd === "dag") {
+    circle(zonX,zonY,zonGrootte);
+  }
+  if (tijd === "nacht") {
+    fill(90);
+  } else {
+    fill(255,255,0);
+  }
   circle(zonX,zonY,45);
 
     // Beweging zon
@@ -60,6 +87,11 @@ function draw() {
     zonX += 0.5;
     if (zonX > 560) {
       zonX = -60;
+      if (tijd === "dag") {
+        tijd = "nacht";
+      } else {
+        tijd = "dag";
+      }
     }
 
   // Wolk
@@ -221,10 +253,27 @@ function draw() {
       fill(clrR,clrG,clrB);
       rect(carPos,350 - carOffset,60,35);
       rect(carPos+60,370 - carOffset,20,15);
+      fill(255,255,0,nachtC * 1.2);
+      triangle(carPos+80, 377.5 - carOffset, carPos+125, 365 - carOffset, carPos+125, 395 - carOffset);
       fill(0);
       stroke(130);
       strokeWeight(3);
       circle(carPos+10,385 - carOffset,20);
       circle(carPos+60,385 - carOffset,20);
     }
+
+
+  // Fade-effect voor koplampen en de voorgrond
+  if (tijd === "nacht") {
+    if (nachtC < 80) {
+      nachtC += 1;
+    }
+  
+  } else {
+    if(nachtC > 0) {
+      nachtC -= 1;
+    }
+  }  
+  fill(0,0,190,nachtC);
+  rect(0,0,500,400);
 }
