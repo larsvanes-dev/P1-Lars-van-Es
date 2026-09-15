@@ -12,9 +12,20 @@ let tijd = "dag";
 let nachtA = 180;
 let nachtB = 255;
 let nachtC = 0;
+let nachtTest = 0;
+
+// Es confidencial (Hou spatie niet ingedrukt als de 'Boolean of Doom' aan staat)
+let lerplerplerpsahur;
+let lerplerplerpsahurSound;
+let lerplerplerpsahurActive = false;
+
+// Boolean of Doom
+let tungmodeOn = false;
 
 function preload() {
   honk = loadSound('honk.wav');
+  lerplerplerpsahur = loadImage('lerplerplerpsahur.png');
+  lerplerplerpsahurSound = loadSound('lerplerplerpsahur.mp3');
 }
 
 function keyReleased() {
@@ -51,22 +62,14 @@ function draw() {
   strokeWeight(1);
   noStroke();
 
-  // Achtergrond verandert bij dag- en nachtcyclus
+  // Achtergrond verandert bij dag- en nachtcyclus met een fade-effect
   background(0,nachtA,nachtB);
   if (tijd === "nacht") {
-    if (nachtA > 0) {
-      nachtA -= 2;
-    }
-    if (nachtB > 80) {
-      nachtB -= 2;
-    } 
+    nachtA = lerp(nachtA, 0, 0.01);
+    nachtB = lerp(nachtB, 80, 0.01);
   } else {
-    if (nachtA < 180) {
-      nachtA += 2;
-    }
-    if (nachtB < 255) {
-      nachtB += 2;
-    }
+    nachtA = lerp(nachtA, 180, 0.01);
+    nachtB = lerp(nachtB, 255, 0.01);
   }
 
   // De zon
@@ -253,8 +256,23 @@ function draw() {
       fill(clrR,clrG,clrB);
       rect(carPos,350 - carOffset,60,35);
       rect(carPos+60,370 - carOffset,20,15);
+
+      // Lerp lerp lerp sahur (Boolean of Doom)
+      if (keyIsDown(32) && tungmodeOn === true) {
+        image(lerplerplerpsahur,carPos, 350 - carOffset, 80, 40);
+        if (lerplerplerpsahurActive === false) {
+          lerplerplerpsahurSound.play();
+          lerplerplerpsahurActive = true;
+        }
+      } else {
+        lerplerplerpsahurActive = false;
+      }
+
+      // Dit stukje is voor de koplampen
       fill(255,255,0,nachtC * 1.2);
       triangle(carPos+80, 377.5 - carOffset, carPos+125, 365 - carOffset, carPos+125, 395 - carOffset);
+
+      // Wielen
       fill(0);
       stroke(130);
       strokeWeight(3);
@@ -265,15 +283,10 @@ function draw() {
 
   // Fade-effect voor koplampen en de voorgrond
   if (tijd === "nacht") {
-    if (nachtC < 80) {
-      nachtC += 1;
-    }
-  
+    nachtC = lerp(nachtC, 80, 0.01)
   } else {
-    if(nachtC > 0) {
-      nachtC -= 1;
-    }
-  }  
+    nachtC = lerp(nachtC, 0, 0.01)
+  }
   fill(0,0,190,nachtC);
   rect(0,0,500,400);
 }
