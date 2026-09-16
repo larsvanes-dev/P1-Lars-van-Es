@@ -12,7 +12,15 @@ let tijd = "dag";
 let nachtA = 180;
 let nachtB = 255;
 let nachtC = 0;
-let nachtTest = 0;
+let ufo;
+let ufoRoll = 0;
+let ufoActive = false;
+let ufoX = -80;
+let ufoY = 50;
+let ufoDX = -80;
+let ufoDY = 50;
+let ufoTimer = 0;
+let ufoStep = 0;
 
 // Es confidencial (Hou spatie niet ingedrukt als de 'Boolean of Doom' aan staat)
 let lerplerplerpsahur;
@@ -26,6 +34,7 @@ function preload() {
   honk = loadSound('honk.wav');
   lerplerplerpsahur = loadImage('lerplerplerpsahur.png');
   lerplerplerpsahurSound = loadSound('lerplerplerpsahur.mp3');
+  ufo = loadImage('ufo.png');
 }
 
 function keyReleased() {
@@ -91,6 +100,7 @@ function draw() {
     if (zonX > 560) {
       zonX = -60;
       if (tijd === "dag") {
+        ufoRoll = ceil(random(1,4));
         tijd = "nacht";
       } else {
         tijd = "dag";
@@ -113,6 +123,31 @@ function draw() {
     if (wolkX < -60) {
       wolkX = 560;
     }
+
+  // UFO (Willekeurige kans)
+  if (ufoActive = true) {
+    ufoTimer += 1;
+    if (ufoTimer > 100) {
+      ufoStep += 1;
+      ufoDX = random(35, 65) + ufoStep * 50;
+      ufoDY = random(20,70);
+      ufoTimer = 0;
+    }
+    ufoX = lerp(ufoX,ufoDX,0.4);
+    ufoY = lerp(ufoY,ufoDY,0.4)
+  }
+  if (ufoRoll === 4 && tijd === "nacht") {
+    image(ufo, ufoX, ufoY, 80, 80);
+    ufoActive = true;
+  } else {
+    ufoActive = false;
+    ufoTimer = 0;
+    ufoX = -80;
+    ufoY = 50;
+    ufoDX = -80;
+    ufoDY = 50;
+    ufoStep = 0;
+  }
 
   // Bergen
   fill(185);
@@ -227,7 +262,7 @@ function draw() {
       if (i === 2 && carPrevPos[2] > carPrevPos[3] - 100 && carPrevPos[2] < carPrevPos[3]) {
     } else {
       // Als ze nog niet bij het verkeerslicht staan of als het stoplicht groen is blijven de auto's doorrijden
-      // de x van elke auto verandert met de waarde van hun stap-variabele
+      // de x van elke auto verandert met de waarde van hun eigen stap-variabele
       if (carPos < 300 || stopLicht === "groen") {
         carPos = carPrevPos[i] + stap;
       } else {
