@@ -22,18 +22,8 @@ let ufoDY = 50;
 let ufoTimer = 0;
 let ufoStep = 0;
 
-// Es confidencial (Hou spatie niet ingedrukt als de 'Boolean of Doom' aan staat)
-let lerplerplerpsahur;
-let lerplerplerpsahurSound;
-let lerplerplerpsahurActive = false;
-
-// Boolean of Doom
-let tungmodeOn = false;
-
 function preload() {
   honk = loadSound('honk.wav');
-  lerplerplerpsahur = loadImage('lerplerplerpsahur.png');
-  lerplerplerpsahurSound = loadSound('lerplerplerpsahur.mp3');
   ufo = loadImage('ufo.png');
 }
 
@@ -99,6 +89,8 @@ function draw() {
     zonX += 0.5;
     if (zonX > 560) {
       zonX = -60;
+
+      // Voordat het nacht wordt wordt bepaald of er een ufo voorbij vliegt of niet
       if (tijd === "dag") {
         ufoRoll = ceil(random(1,4));
         tijd = "nacht";
@@ -136,6 +128,8 @@ function draw() {
     ufoX = lerp(ufoX,ufoDX,0.4);
     ufoY = lerp(ufoY,ufoDY,0.4)
   }
+
+  // Alleen als de variabele ufoRoll 4 is en het nacht is verschijnt er een ufo
   if (ufoRoll === 4 && tijd === "nacht") {
     image(ufo, ufoX, ufoY, 80, 80);
     ufoActive = true;
@@ -291,17 +285,6 @@ function draw() {
       fill(clrR,clrG,clrB);
       rect(carPos,350 - carOffset,60,35);
       rect(carPos+60,370 - carOffset,20,15);
-
-      // Lerp lerp lerp sahur (Boolean of Doom)
-      if (keyIsDown(32) && tungmodeOn === true) {
-        image(lerplerplerpsahur,carPos, 350 - carOffset, 80, 40);
-        if (lerplerplerpsahurActive === false) {
-          lerplerplerpsahurSound.play();
-          lerplerplerpsahurActive = true;
-        }
-      } else {
-        lerplerplerpsahurActive = false;
-      }
 
       // Dit stukje is voor de koplampen
       fill(255,255,0,nachtC * 1.2);
