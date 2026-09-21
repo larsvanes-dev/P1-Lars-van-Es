@@ -16,10 +16,10 @@ function setup() {
 }
 
 function keyReleased() {
-  if (keyIsDown === 32) {
+  if (keyCode === 32) {
     timer = 0;
   }
-  if (keyIsDown === ENTER) {
+  if (keyCode === ENTER) {
     trafficNum = trafficNum + 1;
     if (trafficNum >= 3) {
       trafficNum = 0;
@@ -40,7 +40,7 @@ function draw() {
 
   // Vierkantje
   if (keyIsPressed === true) {
-    if (keyIsDown === ENTER) {
+    if (keyCode === ENTER) {
       rect(20,20,60,60);
     }
   }
