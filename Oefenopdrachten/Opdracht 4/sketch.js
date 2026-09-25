@@ -40,7 +40,7 @@ function draw() {
 
   // Vierkantje
   if (keyIsPressed === true) {
-    if (keyCode === ENTER) {
+    if (keyCode === 66) {
       rect(20,20,60,60);
     }
   }

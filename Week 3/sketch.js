@@ -53,7 +53,7 @@ let thingsThatBarfinSays = [
   "Hm...",
   "What are you gonna do now?",
   "Checkmate, I think.",
-  "UNO!",
+  "UNO! Oh sorry wrong game...",
   "Four houses on Berlin please.",
   "A tic-tac-maestro never quits.",
   "An exquisite move, by me.",
@@ -107,32 +107,59 @@ function mouseReleased() {
     }
   }
 
+  BarfinMode();
   RestartButton();
   CheckForWin();
 }
 
+// Wissel tussen de twee modussen als dat kan en reset het speelbord
+function BarfinMode() {
+  if (mouseX > 320 && mouseX < 350 && mouseY > 355 && mouseY < 385) {
+    if (barfinTimer <= 0) {
+      if (barfinIsPlaying == false) {
+        barfinIsPlaying = true;
+        beurt = SPELER_1;
+        barfinText = "Good luck, you are never going to beat me in tic-tac-toe!";
+      } else {
+        barfinIsPlaying = false;
+        beurt = round(random(SPELER_1, SPELER_2));
+      }
+
+      resetEverything();
+    }
+  }
+}
+
+// Reset-knop
 function RestartButton() {
   if (mouseX >= 360 && mouseX <= 390 && mouseY >= 360 && mouseY <= 390) {
-    for (let i = 0; i < 9; i++) {
-      vakjes[i] = 0;
-    }
-    wintext = " ";
-    winningPlayer = 0;
-    lijn1 = -10;
-    lijn2 = -10;
-    lijn3 = -10;
-    lijn4 = -10;
-    if (barfinIsPlaying == true) {
-      beurt = SPELER_1;
-      barfinTimer = 0;
-      searchingForSquare = false;
-    }
+    resetEverything();
+  }
+}
+
+// Reset-functie
+function resetEverything() {
+  for (let i = 0; i < 9; i++) {
+    vakjes[i] = 0;
+  }
+  wintext = " ";
+  winningPlayer = 0;
+  lijn1 = -10;
+  lijn2 = -10;
+  lijn3 = -10;
+  lijn4 = -10;
+  if (barfinIsPlaying == true) {
+    beurt = SPELER_1;
+    barfinTimer = 0;
+    searchingForSquare = false;
   }
 }
 
 function setup() {
   createCanvas(400, 400);
   effect1x2 = width;
+
+  // Random beurt in de setup van de sketch
   beurt = round(random(1, 2));
 }
 
@@ -143,9 +170,11 @@ function draw() {
 
   tint(255, 70);
 
+  // Scrollende achtergrond
   image(effect1, effect1x1, 0, width, height);
   image(effect1, effect1x2, 0, width, height);
 
+  // Scrolling loop (Herhaalt beweging)
   if (beurt === SPELER_1) {
     effect1x1 -= 2
     effect1x2 -= 2
@@ -166,6 +195,7 @@ function draw() {
     }
   }
 
+  // Barfin (Baggere tic-tac-toe bot)
   if (barfinIsPlaying == true) {
     tint(255,255);
     image(barfin,355,5,40,40);
@@ -179,6 +209,7 @@ function draw() {
     strokeWeight(1);
     stroke(0);
 
+    // Barfin's timer als hij aan het "denken" is
     if (barfinTimer > 0) {
       barfinTimer -= 1;
     }
@@ -186,45 +217,17 @@ function draw() {
       barfinText = "Hm...";
     }
 
+    // Als Barfin's timer op precies 1 staat kiest hij een vakje met de barfinCheck() functie
     if (barfinTimer == 1) {
     searchingForSquare = true;
-    }
-
-    if (searchingForSquare == true) {
-      let findTimer = 0;
-      while (findTimer < 6000) {
-        let squarePicker = round(random(0, 8));
-        if (vakjes[squarePicker] === 0) {
-          vakjes[squarePicker] = 2;
-          beurt = SPELER_1;
-          findTimer = 7000;
-          searchingForSquare = false;
-          barfinText = thingsThatBarfinSays[round(random(totalDialogueP - 1))];
-          CheckForWin();
-        }
-        if (findTimer > 300) {
-          findTimer = 7000;
-          console.log("Spel breekt af.")
-        }
-      }
-    }
-  }
-    
-    if (winningPlayer !== GEEN_SPELER) {
-    searchingForSquare = false;
-    barfinTimer = 0;
-    if (winningPlayer == SPELER_1) {
-      barfinText = "You got lucky.";
-    } else {
-      barfinText = "Another win for me!";
+    barfinCheck();
     }
   }
   
   fill(67);
   rect(50, 50, 300, 300);
 
-  text(barfinTimer,20,20);
-
+  // Achtergrond verandert langzaam van kleur aan de hand van welke speler aan de beurt is
   if (beurt === SPELER_1) {
     bgR = lerp(bgR, COLOR_ON, 0.05);
     bgB = lerp(bgB, COLOR_OFF, 0.05);
@@ -272,13 +275,38 @@ function draw() {
   // Laat visueel zien wie heeft gewonnen of er een gelijkspel is
   fill(255);
   text(wintext, 50, 380);
-
-  text("Reset", 359, 355);
+  
+  // Reset-knop visueel
+  text("Reset", 359, 396);
   fill(255, 255, 0);
-  rect(360, 360, 30, 30);
+  rect(360, 355, 30, 30);
+
+  // Barfin-knop visueel
+  fill(255);
+  text("Barfin", 319, 396);
+  fill(150, 255, 90);
+  rect(320, 355, 30, 30);
+
+  // De lijn
   stroke(255);
   strokeWeight(7);
   line(lijn1, lijn2, lijn3, lijn4);
+}
+
+// Een check functie in nog een check functie :D
+function barfinCheck() {
+  let findTimer = 0;
+  while (findTimer < 100) {
+    let squarePicker = round(random(0, 8));
+    if (vakjes[squarePicker] === 0) {
+      vakjes[squarePicker] = 2;
+      beurt = SPELER_1;
+      findTimer = 7000;
+      searchingForSquare = false;
+      barfinText = thingsThatBarfinSays[round(random(totalDialogueP - 1))];
+      CheckForWin();
+    }
+  }
 }
 
 function CheckForWin() {
@@ -364,6 +392,19 @@ function CheckForWin() {
 
     if (winningPlayer != 0){
       wintext = "Speler " + playerToCheck + " heeft gewonnen!";
+    }
+    
+    // Barfin's dialoog verandert en de timer reset
+    if (barfinIsPlaying == true) {
+      if (winningPlayer !== GEEN_SPELER) {
+        searchingForSquare = false;
+        barfinTimer = 0;
+        if (winningPlayer == SPELER_1) {
+          barfinText = "You got lucky.";
+        } else {
+          barfinText = "Another win for me!";
+        }
+      }
     }
   
 }

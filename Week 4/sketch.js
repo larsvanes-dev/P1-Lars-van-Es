@@ -17,6 +17,19 @@ function setup() {
   }
 }
 
+function mousePressed() {
+  for (let i = 0; i < shapesX.length; i++) {
+    if (mouseX > (shapesX[i] - (0.4 * shapesDiameter[i])) && mouseX < (shapesX[i] + (0.4 * shapesDiameter[i])) && mouseY > (shapesY[i] - (0.4 * shapesDiameter[i])) && mouseY < (shapesY[i] + (0.4 * shapesDiameter[i]))) {
+      shapesX.splice(i, 1);
+      shapesY.splice(i, 1);
+      shapesDiameter.splice(i, 1);
+      shapesR.splice(i, 1);
+      shapesG.splice(i, 1);
+      shapesB.splice(i, 1);
+    }
+  }
+}
+
 function keyReleased() {
   let shapesInstance = round(random(shapesX.length)) - 2;
   shapesX.splice(shapesInstance,1);
